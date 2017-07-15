@@ -17,7 +17,7 @@ def slices(collection, sliceSize):
     Returns:
         A generator for iterating over the slices.
     """
-    numSlices = (len(collection) + sliceSize) // sliceSize # round up
+    numSlices = (len(collection) + sliceSize) // sliceSize  # round up
     for i in range(numSlices):
-        yield collection[i * sliceSize : (i+1) * sliceSize]
-
+        start, end = i * sliceSize, (i+1) * sliceSize
+        yield collection[start:end]
