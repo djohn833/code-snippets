@@ -1,0 +1,1 @@
+DBCC CHECKDB (DatabaseName) WITH NO_INFOMSGS;
