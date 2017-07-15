@@ -8,8 +8,8 @@ DECLARE @backupName nvarchar(max) = @BackupDirectory + '\' + @VersionAndTimestam
 
 IF EXISTS(select * from sys.databases where name='DatabaseName')
 BEGIN
-	ALTER DATABASE DatabaseName SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-	DROP DATABASE DatabaseName;
+    ALTER DATABASE DatabaseName SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE DatabaseName;
 END
 
 --RESTORE FILELISTONLY  
