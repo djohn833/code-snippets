@@ -1,7 +1,7 @@
-def slices(collection, sliceSize):
-    """Iterate over a collection, sliceSize items at a time.
+def chunks(collection, chunkSize):
+    """Iterate over a collection, chunkSize items at a time.
 
-    >>> for s in slices('abcdefgh', 3):
+    >>> for s in chunks('abcdefgh', 3):
     ...     print(s)
     abc
     def
@@ -9,10 +9,10 @@ def slices(collection, sliceSize):
 
     Args:
         collection: collection to loop over.
-        sliceSize: size of each slice.
+        chunkSize: size of each chunk.
 
     Returns:
-        A generator for iterating over the slices.
+        A generator for iterating over the chunks.
     """
-    for i in range(0, len(collection), sliceSize):
-        yield collection[i:i + sliceSize]
+    for i in range(0, len(collection), chunkSize):
+        yield collection[i:i + chunkSize]
