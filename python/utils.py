@@ -1,6 +1,3 @@
-import itertools
-
-
 def slices(collection, sliceSize):
     """Iterate over a collection, sliceSize items at a time.
 
@@ -17,7 +14,5 @@ def slices(collection, sliceSize):
     Returns:
         A generator for iterating over the slices.
     """
-    numSlices = (len(collection) + sliceSize) // sliceSize  # round up
-    for i in range(numSlices):
-        start, end = i * sliceSize, (i+1) * sliceSize
-        yield collection[start:end]
+    for i in range(0, len(collection), sliceSize):
+        yield collection[i:i + sliceSize]
