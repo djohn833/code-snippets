@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration
+    xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform"
+    xmlns:asm="urn:schemas-microsoft-com:asm.v1">
+    
+    <runtime>
+        <asm:assemblyBinding><!-- xmlns="urn:schemas-microsoft-com:asm.v1" -->
+          <asm:dependentAssembly xdt:Locator="Condition(asm:assemblyIdentity/@publicKeyToken='7ac5ea2d2c82728a')">
+            <asm:bindingRedirect oldVersion="0.0.0.0-18.9.1.11" newVersion="$(foo)" xdt:Transform="SetAttributes(oldVersion,newVersion)" />
+          </asm:dependentAssembly>
+        </asm:assemblyBinding>
+    </runtime>
+
+</configuration>
