@@ -1,15 +1,15 @@
-select EnsureAtLeastOneRow.*
-from (select 1)
-left join
+SELECT EnsureAtLeastOneRow.*
+FROM (SELECT 1)
+LEFT JOIN
 (
     -- Put original query here
-) EnsureAtLeastOneRow on 1 = 1;
+) EnsureAtLeastOneRow ON 1 = 1;
 
-select EnsureExactlyOneRow.*
-from (select 1)
-left join
+SELECT EnsureExactlyOneRow.*
+FROM (SELECT 1)
+LEFT JOIN
 (
     -- Put original query here
-) EnsureExactlyOneRow on 1 = 1
-limit 1;
+) EnsureExactlyOneRow ON 1 = 1
+LIMIT 1;
 
