@@ -1,6 +1,7 @@
 DECLARE @BackupDirectory nvarchar(max) = 'C:\BackupLocation';
 DECLARE @timestamp datetime = CURRENT_TIMESTAMP;
 DECLARE @timestampString char(12) = FORMAT(@timestamp, 'yyyyMMddHHmm');
+DECLARE @timestampDisplayString char(16) = FORMAT(@timestamp, 'yyyy-MM-dd HH:mm');
 DECLARE @version nvarchar(64);
 DECLARE @backupName nvarchar(max);
 
@@ -12,9 +13,9 @@ SET @backupName = @BackupDirectory + '\' + @version + '_' + @timestampString + '
 
 USE [master]
 
-PRINT('Backing up Database Version ' + @version + ' at ' + FORMAT(@timestamp, 'yyyy-MM-dd HH:mm'));
+RAISERROR('Backing up Database Version %s at %s', 0, 1, @version, @timestampDisplayString) WITH NOWAIT;
 
-PRINT('Backing up DatabaseName to ' + @backupName);
+RAISERROR('Backing up DatabaseName to %s', 0, 1, @backupName) WITH NOWAIT;
 
 BACKUP DATABASE [DatabaseName]
 TO DISK = @backupName
