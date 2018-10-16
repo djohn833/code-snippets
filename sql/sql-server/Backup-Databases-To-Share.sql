@@ -1,4 +1,4 @@
-DECLARE @BackupDirectory nvarchar(max) = 'C:\BackupLocation';
+DECLARE @BackupDirectory nvarchar(max) = 'C:\Share';
 DECLARE @timestamp datetime = CURRENT_TIMESTAMP;
 DECLARE @timestampString char(12) = FORMAT(@timestamp, 'yyyyMMddHHmm');
 DECLARE @version nvarchar(64);
