@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 def escape_for_charset(c):
-    """Escape a character to include it in a character set in a regex.
+    r"""Escape a character to include it in a character set in a regex.
 
     Characters with special meanings inside a character set (e.g., \, ^, \, and -)
     must be escaped with a slash for them to be included in the character set
@@ -18,7 +18,24 @@ def escape_for_charset(c):
     Returns:
         A string that contains c, escaped if needed.
 
+    >>> print(escape_for_charset(']'))
+    \]
+
+    >>> print(escape_for_charset('^'))
+    \^
+
+    >>> print(escape_for_charset('\\'))
+    \\
+
+    >>> print(escape_for_charset('-'))
+    \-
     """
+    
     if c == ']' or c == '^' or c == '\\' or c == '-':
         return '\\' + c
     return c
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
