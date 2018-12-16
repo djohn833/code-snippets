@@ -5,7 +5,7 @@ from regex_helpers import escape_for_charset
 
 
 def binary_search_with_compare(c):
-    low, high = 0x00, 0x7e
+    low, high = 0x20, 0x7e
     while low < high:
         guess = (low + high + 1) // 2
         if chr(guess) <= c:
@@ -17,7 +17,7 @@ def binary_search_with_compare(c):
 
 
 def binary_search_with_regex(c):
-    low, high = 0x00, 0x7e
+    low, high = 0x20, 0x7e
     while low < high:
         guess = (low + high + 1) // 2
         # Iff guess <= c, then c matches [guess-high]
