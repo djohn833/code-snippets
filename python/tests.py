@@ -2,12 +2,10 @@ import doctest
 import unittest
 import utils
 
-
-class TestDocstrings(unittest.TestCase):
-    def test_utils(self):
-        result = doctest.testmod(utils)
-        self.assertEqual(result.failed, 0)
-
+def load_tests(loader, tests, ignore):
+    tests.addTests(doctest.DocTestSuite('regex_helpers'))
+    tests.addTests(doctest.DocTestSuite('utils'))
+    return tests
 
 if __name__ == '__main__':
     unittest.main()
