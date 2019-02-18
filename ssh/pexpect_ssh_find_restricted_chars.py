@@ -8,7 +8,7 @@ import string
 password = getpass.getpass('password:')
 
 
-s = pexpect.spawn('ssh level3@ringzer0team.com -p 1016')
+s = pexpect.spawn('ssh level3@challenges.ringzer0team.com -p 10220')
 s.expect('password:')
 time.sleep(0.1)
 s.sendline(password)
