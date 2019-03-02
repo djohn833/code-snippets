@@ -1,0 +1,11 @@
+# Virtualenv
+.Python
+bin/
+include/
+lib/
+
+# Directories
+__pycache__/
+
+# Files
+test_record.py
