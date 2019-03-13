@@ -2,7 +2,7 @@
 
 void Main()
 {
-	foreach (var dll in Directory.GetFiles(@"D:\dev\Pharmacy\DEV\QS1.Pharmacy\QS1.Framework.ServiceHost\bin\", "*.dll"))
+	foreach (var dll in Directory.GetFiles(@"SearchPath", "*.dll"))
 	{
 		var assembly = Assembly.LoadFile(dll);
 		
