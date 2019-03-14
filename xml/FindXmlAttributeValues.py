@@ -10,4 +10,4 @@ filename = sys.argv[3]
 doc = ET.parse(filename)
 for node in doc.getroot().iter(elemName):
     if attrName in node.attrib:
-        print('{0}: {1}'.format(sys.argv[1], node.attrib[attrName]))
+        print('{0}: {1}'.format(attrName, node.attrib[attrName]))
