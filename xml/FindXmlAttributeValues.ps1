@@ -11,7 +11,7 @@ param (
 $document = [System.Xml.Linq.XDocument]::Load($FileName)
 
 ForEach ($node in $document.Root.Descendants($ElementName)) {
-    $attribute = [Linq.Enumerable]::FirstOrDefault($node.Attributes($AttributeName))
+    $attribute = $node.Attributes($AttributeName) | Select -First 1
     If ($attribute) {
         Write-Host "${AttributeName}: $($attribute.Value)"
     }
