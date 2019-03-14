@@ -3,10 +3,10 @@ SET NOCOUNT ON;
 DECLARE @view_full_name NVARCHAR(MAX);
 
 DECLARE view_cursor CURSOR FOR
-	SELECT N'[' + SCHEMA_NAME(o.schema_id) + N'].[' + o.name + N']'
-	FROM sys.objects o
-	WHERE o.type = 'V'
-	ORDER BY SCHEMA_NAME(o.schema_id), o.name;
+SELECT N'[' + SCHEMA_NAME(o.schema_id) + N'].[' + o.name + N']'
+FROM sys.objects o
+WHERE o.type = 'V'
+ORDER BY SCHEMA_NAME(o.schema_id), o.name;
 OPEN view_cursor;
 
 WHILE 1 = 1

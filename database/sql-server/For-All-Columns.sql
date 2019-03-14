@@ -1,10 +1,10 @@
 SET NOCOUNT ON;
 
 DECLARE column_cursor CURSOR FOR
-	SELECT N'[' + SCHEMA_NAME(tables.schema_id) + N'].[' + OBJECT_NAME(all_columns.object_id) + N']', all_columns.name
-	FROM sys.all_columns
-	JOIN sys.tables ON tables.object_id = all_columns.object_id
-	ORDER BY SCHEMA_NAME(tables.schema_id), OBJECT_NAME(all_columns.object_id), all_columns.name;
+SELECT N'[' + SCHEMA_NAME(tables.schema_id) + N'].[' + OBJECT_NAME(all_columns.object_id) + N']', all_columns.name
+FROM sys.all_columns
+JOIN sys.tables ON tables.object_id = all_columns.object_id
+ORDER BY SCHEMA_NAME(tables.schema_id), OBJECT_NAME(all_columns.object_id), all_columns.name;
 OPEN column_cursor;
 
 DECLARE @MatchingColumns TABLE (
