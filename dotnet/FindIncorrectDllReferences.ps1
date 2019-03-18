@@ -2,13 +2,12 @@ param (
     [string]$Directory = $(throw "Directory parameter is required.")
 )
 
-# Set these as needed
+# Configurable variables. Set these as needed
 $dllPattern = "*.dll"
 $allowedDllReferences = @()
+# End configurable variables.
 
-$projectFiles = Get-ChildItem $Directory -Recurse -Include *.csproj
-
-ForEach ($projectFile in $projectFiles) {
+ForEach ($projectFile in Get-ChildItem $Directory -Recurse -Include *.csproj) {
     $matches = Select-String $projectFile -Pattern $dllPattern |
         Where-Object { $allowedDllReferences -notcontains $_.Matches[0].Groups[1] }
 
