@@ -1,4 +1,5 @@
 <Query Kind="Program">
+  <GACReference>Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed</GACReference>
   <Namespace>Newtonsoft.Json</Namespace>
 </Query>
 
