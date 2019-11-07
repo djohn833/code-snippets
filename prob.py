@@ -3,8 +3,8 @@ from random import *
 
 N = 1000000
 
-def angle():
-	return uniform(0, 2*pi)
+def angle(end=360.0):
+	return uniform(0, end)
 
 def coord(t):
     return (cos(t), sin(t))
@@ -20,12 +20,35 @@ def distO(p):
 
 
 # Probability that three random points on a circle form a triangle that contains the center of the circle
+
+# Method 1: Are the arcs acute? If so the inscribed triangle is acute and contains the circle's center.
 n = 0
 for i in range(N):
     b, c = sorted([angle() for j in range(2)])
-    if b <= pi and c - b <= pi and (2*pi - c) <= pi:
+    if b <= 180.0 and c - b <= 180.0 and (360.0 - c) <= 180.0:
         n += 1
-print('Random points: %f' % (float(n) / N))
+print('3 random points on a circle: %f' % (float(n) / N))
+
+# Method 2: Take the diameter that contains point a. Is the other end of the diameter between b and c (the smaller arc)?
+#           If so, the triangle must contain the circle's center because it's the midpoint of the diameter.
+n = 0
+# N = 10
+for i in range(N):
+    b, c = sorted([angle() for j in range(2)])
+    # Is clockwise from b to c the small arc, and is the other end of the diameter inside the small arc?
+    if c - b <= 180.0 and b <= 180.0 <= c:
+        n += 1
+print('3 random points on a circle: %f' % (float(n) / N))
+
+# Probability that four random points on a sphere form a tetrahedron that contains the center of the sphere
+n = 0
+for i in range(N):
+    thetas = sorted([angle() for j in range(3)])
+    phis = [angle(180.0) for j in range(3)]
+
+    if b <= 180.0 and c - b <= 180.0 and (360.0 - c) <= 180.0:
+        n += 1
+print('4 random points on a sphere: %f' % (float(n) / N))
 
 
 # Probability that a random chord is longer than the sides of an inscribed equilateral triangle.
@@ -37,7 +60,7 @@ print('Random points: %f' % (float(n) / N))
 n = 0
 for i in range(N):
     b, = [angle() for j in range(1)]
-    if (2.0 * pi) / 3.0 <= b <= (4.0 * pi) / 3.0:
+    if 120.0 <= b <= 240.0:
         n += 1
 print('Random chord endpoints: %f' % (float(n) / N))
 
@@ -69,4 +92,3 @@ for i in range(N):
     if d <= 0.5:
         n += 1
 print('Random chord midpoints (by distance from center): %f' % (float(n) / N))
-
