@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import numpy as np
 import os
 from PIL import Image
 import pyautogui
+from tqdm import tqdm
 
 winLeft = 8
 winTop = 22
@@ -17,6 +19,18 @@ whiteColor = (255, 255, 255)
 blackColor = (0, 0, 0)
 grayColor = (128, 128, 128)
 redColor = (255, 0, 0)
+
+print('Loading font')
+
+fontArray = np.empty((92, 94, 16, 16), bool)
+
+for i in tqdm(range(16, 1488, 16)):
+        for j in range(528, 2032, 16):
+                for k in range(0, 16):
+                        for m in range(0, 16):
+                                fontArray[(i-16) // 16, (j-528) // 16, k, m] = fontPx[i + k, j + m]
+
+print('Font loaded')
 
 def calibrate():
         global winLeft, winTop
@@ -126,20 +140,27 @@ px = textbox.load()
 
 sjisText = bytearray()
 
-with open('text.txt', 'a', encoding='utf-8') as f:
+with open('text.txt', 'w', encoding='utf-8') as f:
         for j in range(0, 3):
                 for i in range(0, 32):
-                        bestLoc, bestScore, numMatch = findMatch(i, j)
-                        #print('%d %d' % bestLoc)
-                        coord1 = 0x81 + ((bestLoc[0]-1) // 2)
-                        coord2 = (0x40 if bestLoc[0] % 2 == 1 else 0x9f) + (bestLoc[1] - 33)
+                        pxArray = np.empty((16, 16))
+                        for k in range(0, 16):
+                                for m in range(0, 16):
+                                        pxArray[k, m] = px[i*16 + k, j*20 + m] == whiteColor
+
+                        resultArray = np.logical_xor(fontArray, pxArray)
+                        resultArray = np.sum(resultArray, axis=(-1, -2))
+                        minIndex = np.unravel_index(np.argmin(resultArray), resultArray.shape)
+                        bestScore = resultArray[minIndex]
+                        coord1 = 0x81 + (minIndex[0] // 2)
+                        coord2 = (0x40 if minIndex[0] % 2 == 0 else 0x9f) + (minIndex[1])
                         if 0x80 <= coord2 < 0x9f:
                                 coord2 += 1
                         sjisText = bytearray([coord1, coord2])
                         #sjisText.append(coord1)
                         #sjisText.append(coord2)
-                        print('%d %d 0x%02x%02x %d %d' % (j, i, coord1, coord2, numMatch, bestScore))
+                        print('%d %d 0x%02x%02x %d' % (j, i, coord1, coord2, bestScore))
                         #bestChar.save('match2.bmp')
                         #sjisText = b'\x%02x\x%02x' % (coord1, coord2)
                         f.write(sjisText.decode('shiftjis'))
-                        f.flush()
+                f.write("\n")
