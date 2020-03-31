@@ -22,13 +22,14 @@ redColor = (255, 0, 0)
 
 print('Loading font')
 
-fontArray = np.empty((92, 94, 16, 16), bool)
+fontArray = np.load('fontdata.npy')
+# fontArray = np.empty((92, 94, 16, 16), bool)
 
-for i in tqdm(range(16, 1488, 16)):
-        for j in range(528, 2032, 16):
-                for k in range(0, 16):
-                        for m in range(0, 16):
-                                fontArray[(i-16) // 16, (j-528) // 16, k, m] = fontPx[i + k, j + m]
+# for i in tqdm(range(16, 1488, 16)):
+#         for j in range(528, 2032, 16):
+#                 for k in range(0, 16):
+#                         for m in range(0, 16):
+#                                 fontArray[(i-16) // 16, (j-528) // 16, k, m] = fontPx[i + k, j + m]
 
 print('Font loaded')
 
@@ -135,15 +136,14 @@ def findMatch(x, y):
 #filterTextbox(textbox)
 #textbox.save('ss3.png')
 textbox = Image.open('ss3.png')
-
 px = textbox.load()
 
+pxArray = np.empty((16, 16))
 sjisText = bytearray()
 
 with open('text.txt', 'w', encoding='utf-8') as f:
         for j in range(0, 3):
                 for i in range(0, 32):
-                        pxArray = np.empty((16, 16))
                         for k in range(0, 16):
                                 for m in range(0, 16):
                                         pxArray[k, m] = px[i*16 + k, j*20 + m] == whiteColor
@@ -157,10 +157,11 @@ with open('text.txt', 'w', encoding='utf-8') as f:
                         if 0x80 <= coord2 < 0x9f:
                                 coord2 += 1
                         sjisText = bytearray([coord1, coord2])
-                        #sjisText.append(coord1)
-                        #sjisText.append(coord2)
-                        print('%d %d 0x%02x%02x %d' % (j, i, coord1, coord2, bestScore))
-                        #bestChar.save('match2.bmp')
-                        #sjisText = b'\x%02x\x%02x' % (coord1, coord2)
-                        f.write(sjisText.decode('shiftjis'))
+                        #print('%d %d 0x%02x%02x %d' % (j, i, coord1, coord2, bestScore))
+                        text = sjisText.decode('shiftjis')
+                        print(text, end='')
+                        f.write(text)
+                print()
                 f.write("\n")
+
+# np.save('fontdata', fontArray)
