@@ -3,6 +3,7 @@
 import numpy as np
 import os
 from PIL import Image
+import re
 import pyautogui
 from tqdm import tqdm
 
@@ -34,23 +35,30 @@ px = textbox.load()
 pxArray = np.empty((16, 16))
 sjisText = bytearray()
 
-with open('text.txt', 'w', encoding='utf-8') as f:
-    for j in range(0, 3):
-        for i in range(0, 32):
-            for k in range(0, 16):
-                for m in range(0, 16):
-                    pxArray[k, m] = px[i*16 + k, j*20 + m] == whiteColor
+text = ''
 
-            resultArray = np.logical_xor(fontArray, pxArray)
-            resultArray = np.sum(resultArray, axis=(-1, -2))
-            minIndex = np.unravel_index(np.argmin(resultArray), resultArray.shape)
-            bestScore = resultArray[minIndex]
-            coord1 = 0x81 + (minIndex[0] // 2)
-            coord2 = (0x40 if minIndex[0] % 2 == 0 else 0x9f) + (minIndex[1])
-            if 0x80 <= coord2 < 0x9f:
-                coord2 += 1
-            sjisText = bytearray([coord1, coord2])
-            #print('%d %d 0x%02x%02x %d' % (j, i, coord1, coord2, bestScore))
-            text = sjisText.decode('shiftjis')
-            print(text, end='')
-            f.write(text)
+for j in range(0, 3):
+    for i in range(0, 32):
+        for k in range(0, 16):
+            for m in range(0, 16):
+                pxArray[k, m] = px[i*16 + k, j*20 + m] == whiteColor
+
+        resultArray = np.logical_xor(fontArray, pxArray)
+        resultArray = np.sum(resultArray, axis=(-1, -2))
+        minIndex = np.unravel_index(np.argmin(resultArray), resultArray.shape)
+        bestScore = resultArray[minIndex]
+        coord1 = 0x81 + (minIndex[0] // 2)
+        coord2 = (0x40 if minIndex[0] % 2 == 0 else 0x9f) + (minIndex[1])
+        if 0x80 <= coord2 < 0x9f:
+            coord2 += 1
+        sjisText = bytearray([coord1, coord2])
+        #print('%d %d 0x%02x%02x %d' % (j, i, coord1, coord2, bestScore))
+        text += sjisText.decode('shiftjis')
+
+# Replace trailing spaces and punctuation incorrectly matched due to the text brackground
+text = re.sub(r"(\s|\u2032)*$", '', text)
+
+print(text)
+
+with open('text.txt', 'w', encoding='utf-8') as f:
+    f.write(text)
