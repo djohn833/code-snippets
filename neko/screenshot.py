@@ -55,7 +55,7 @@ for j in range(0, 3):
         #print('%d %d 0x%02x%02x %d' % (j, i, coord1, coord2, bestScore))
         text += sjisText.decode('shiftjis')
 
-# Replace trailing spaces and punctuation incorrectly matched due to the text brackground
+# Replace trailing spaces and punctuation incorrectly matched due to the text background
 text = re.sub(r"(\s|\u2032)*$", '', text)
 
 print(text)
