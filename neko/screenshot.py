@@ -14,7 +14,9 @@ neko = Image.open('neko.png')
 
 whiteColor = (255, 255, 255)
 
+print('Loading font')
 fontArray = np.load('fontdata.npy')
+print('Font loaded')
 
 def calibrate():
     global winLeft, winTop
