@@ -68,11 +68,6 @@ def parseText(textbox, debug=False):
     return text
 
 calibrate()
-#window = captureWindow()
-#window = Image.open('ss2.png')
-#textbox = window.crop((65, 355, 577, 440))
-#textbox.save('ss3.png')
-#textbox = Image.open('ss3.png')
 
 def captureAndParse(debug=False):
     global window, textbox
