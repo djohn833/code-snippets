@@ -21,12 +21,12 @@ print('Font loaded')
 def calibrate():
     global winLeft, winTop
     loc = pyautogui.locateOnScreen(neko)
-    winLeft, winTop = loc.left, loc.Top
+    winLeft, winTop = loc.left, loc.top
 
 def captureWindow():
     return pyautogui.screenshot(region=(winLeft, winTop, 643, 450))
 
-def parseText(textbox):
+def parseText(textbox, debug=False):
     px = textbox.load()
 
     pxArray = np.empty((16, 16))
@@ -46,26 +46,47 @@ def parseText(textbox):
             bestScore = resultArray[minIndex]
             coord1 = 0x81 + (minIndex[0] // 2)
             coord2 = (0x40 if minIndex[0] % 2 == 0 else 0x9f) + (minIndex[1])
-            if 0x80 <= coord2 < 0x9f:
+            if 0x7f <= coord2 < 0x9f:
                 coord2 += 1
             sjisText = bytearray([coord1, coord2])
-            #print('%d %d 0x%02x%02x %d' % (j, i, coord1, coord2, bestScore))
-            text += sjisText.decode('shiftjis')
+            try:
+                char = sjisText.decode('shiftjis')
+            except:
+                if coord1 == 0x86 and coord2 == 0x9d:
+                    char = "\u3000" # Ideographic space
+                else:
+                    char = "\u25a1" # White square
+                print('%d %d 0x%02x%02x %04x %d' % (j, i, coord1, coord2, ord(char), bestScore))
+
+            if debug:
+                print('%d %d 0x%02x%02x %04x %d' % (j, i, coord1, coord2, ord(char), bestScore))
+            text += char
 
     # Replace trailing spaces and punctuation incorrectly matched due to the text background
-    text = re.sub(r"(\s|\u2032)*$", '', text)
+    text = re.sub(r"(\s|\u2032|\uff0c|\uff40)*$", '', text)
 
     return text
 
-#calibrate()
+calibrate()
 #window = captureWindow()
 #window = Image.open('ss2.png')
 #textbox = window.crop((65, 355, 577, 440))
 #textbox.save('ss3.png')
-textbox = Image.open('ss3.png')
+#textbox = Image.open('ss3.png')
 
-text = parseText(textbox)
-print(text)
+def captureAndParse(debug=False):
+    global window, textbox
+    
+    window = captureWindow()
+    print('Screenshot captured')
+    #window = Image.open('ss2.png')
+    
+    textbox = window.crop((65, 355, 577, 440))
+    #textbox.save('ss4.png')
+    #textbox = Image.open('ss3.png')
 
-with open('text.txt', 'w', encoding='utf-8') as f:
-    f.write(text)
+    text = parseText(textbox, debug)
+    #print(text)
+
+    with open('text.html', 'a', encoding='utf-8') as f:
+        f.write('<p>' + text + "</p>\n")
