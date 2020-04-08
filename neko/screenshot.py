@@ -67,9 +67,7 @@ def parseText(textbox, debug=False):
 
     return text
 
-calibrate()
-
-def captureAndParse(debug=False):
+def captureAndParse(filename, debug=False):
     global window, textbox
     
     window = captureWindow()
@@ -83,5 +81,8 @@ def captureAndParse(debug=False):
     text = parseText(textbox, debug)
     #print(text)
 
-    with open('text.html', 'a', encoding='utf-8') as f:
+    with open(filename, 'a', encoding='utf-8') as f:
         f.write('<p>' + text + "</p>\n")
+
+if __name__ == '__main__':
+    calibrate()
