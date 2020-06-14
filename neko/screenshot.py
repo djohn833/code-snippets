@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import os
+import os.path
 from PIL import Image
 import re
 import pyautogui
+import time
 from tqdm import tqdm
 
 winLeft = 8
@@ -33,6 +35,7 @@ def parseText(textbox, debug=False):
     sjisText = bytearray()
 
     text = ''
+    charNotFound = False
 
     for j in range(0, 3):
         for i in range(0, 32):
@@ -52,37 +55,68 @@ def parseText(textbox, debug=False):
             try:
                 char = sjisText.decode('shiftjis')
             except:
-                if coord1 == 0x86 and coord2 == 0x9d:
-                    char = "\u3000" # Ideographic space
+                if (coord1, coord2) == (0x86, 0x9d):
+                    char = "\u300d" # Right corner bracket
+                elif (coord1, coord2) == (0x86, 0x99):
+                    char = "\u300b" # Right double angle bracket
                 else:
                     char = "\u25a1" # White square
-                print('%d %d 0x%02x%02x %04x %d' % (j, i, coord1, coord2, ord(char), bestScore))
+                    charNotFound = True
 
-            if debug:
-                print('%d %d 0x%02x%02x %04x %d' % (j, i, coord1, coord2, ord(char), bestScore))
+            if debug or char == "\u25a1":
+                print('%d %d %d %d 0x%02x%02x %04x %d' % (j, i, minIndex[0], minIndex[1], coord1, coord2, ord(char), bestScore))
             text += char
 
     # Replace trailing spaces and punctuation incorrectly matched due to the text background
-    text = re.sub(r"(\s|\u2032|\uff0c|\uff40)*$", '', text)
+    text = re.sub(r"(\s|\u2032|\u25a1|\u309c|\uff0c|\uff40)*$", '', text)
 
-    return text
+    return text, charNotFound
 
-def captureAndParse(filename, debug=False):
-    global window, textbox
+def captureScreen():
+    global window
     
     window = captureWindow()
     print('Screenshot captured')
     #window = Image.open('ss2.png')
+
+def makeImageFilename(filename):
+    ts = time.strftime("%Y%m%d-%H%M%S")
+    basename = os.path.basename(filename)
+    splitext = os.path.splitext(basename)
+    return 'images/' + splitext[0] + ' ' + ts + '.png'
+
+def captureScene(filename):
+    captureScreen()
+    
+    scene = window.crop((97, 67, 545, 339))
+    imageFilename = makeImageFilename(filename)
+    scene.save(imageFilename)
+
+    with open(filename, 'a', encoding='utf-8') as f:
+        f.write(f"<img src=\"{imageFilename}\" />\n")
+
+def captureAndParse(filename, debug=False):
+    global textbox
+
+    captureScreen()
     
     textbox = window.crop((65, 355, 577, 440))
     #textbox.save('ss4.png')
-    #textbox = Image.open('ss3.png')
+    #textbox = Image.open('ss4.png')
 
-    text = parseText(textbox, debug)
+    text, charNotFound = parseText(textbox, debug)
     #print(text)
 
+    imageFilename = makeImageFilename(filename)
+
+    if charNotFound:
+        textbox.save(imageFilename)
+
     with open(filename, 'a', encoding='utf-8') as f:
+        if charNotFound:
+            f.write(f"<img src=\"{imageFilename}\" />\n")
         f.write('<p>' + text + "</p>\n")
+        
 
 if __name__ == '__main__':
     calibrate()
