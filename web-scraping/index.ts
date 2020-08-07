@@ -1,5 +1,5 @@
-const fs = require('fs');
-const puppeteer = require('puppeteer');
+import * as fs from 'fs';
+import * as puppeteer from 'puppeteer';
 
 async function main() {
   const browser = await puppeteer.launch({
@@ -10,8 +10,8 @@ async function main() {
 
   await page.goto('http://www.alternativejs.com/');
 
-  const closeModal = (await page.$x('//*[@id="PopupSignupForm_0"]/div[2]/div[1]'))[0];
-  await closeModal.click();
+  // const closeModal = (await page.$x('//*[@id="PopupSignupForm_0"]/div[2]/div[1]'))[0];
+  // await closeModal.click();
 
   let myElement = (await page.$x('//*[@id="mainNav"]/div/a'))[0];
   let titleProp = await myElement.getProperty('innerText');
@@ -20,7 +20,9 @@ async function main() {
 
   await page.screenshot({ path: './myPage.png' });
 
-  fs.writeFileSync('./myData.txt', title);
+  if (typeof(title) === 'string') {
+    fs.writeFileSync('./myData.txt', title);
+  }
 
   await browser.close();
 }
