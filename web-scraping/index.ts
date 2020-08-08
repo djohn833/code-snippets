@@ -13,8 +13,8 @@ async function main() {
   // const closeModal = (await page.$x('//*[@id="PopupSignupForm_0"]/div[2]/div[1]'))[0];
   // await closeModal.click();
 
-  let myElement = (await page.$x('//*[@id="mainNav"]/div/a'))[0];
-  let titleProp = await myElement.getProperty('innerText');
+  let myElements = await page.$x('//*[@id="mainNav"]/div/a');
+  let titleProp = await myElements[0].getProperty('innerText');
   let title = await titleProp.jsonValue();
   console.log({title})
 
