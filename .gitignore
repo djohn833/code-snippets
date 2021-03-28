@@ -1,3 +1,6 @@
+__pycache__
+node_modules
+
 neko/base.png
 neko/font.bmp
 neko/font.grid.bmp

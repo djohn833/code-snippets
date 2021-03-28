@@ -3,16 +3,20 @@ import * as puppeteer from 'puppeteer';
 
 async function main() {
   const browser = await puppeteer.launch({
-    headless: true
+    headless: false
   });
 
   const page = await browser.newPage();
 
   await page.goto('http://www.alternativejs.com/');
 
-  // const closeModal = (await page.$x('//*[@id="PopupSignupForm_0"]/div[2]/div[1]'))[0];
-  // await closeModal.click();
+  const closeModals = await page.$x('//*[@id="PopupSignupForm_0"]/div[2]/div[1]');
+  await closeModals[0].click();
 
+  const menus = await page.$x('//*[@id="mainNav"]/div/button');
+  await menus[0].click();
+
+  //*[@id="mainNav"]/div/a
   let myElements = await page.$x('//*[@id="mainNav"]/div/a');
   let titleProp = await myElements[0].getProperty('innerText');
   let title = await titleProp.jsonValue();

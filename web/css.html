@@ -1,0 +1,17 @@
+<html>
+        <head>
+                <style>
+                    #foo {
+                            background: url(?attr(value));
+                    }
+                </style>
+                <script>
+                        function keyup(element) {
+                            element.setAttribute('value', element.value);
+                        }
+                </script>
+        </head>
+<body>
+        <input id="foo" type="password" onkeyup="keyup(this)" />
+</body>
+</html>
